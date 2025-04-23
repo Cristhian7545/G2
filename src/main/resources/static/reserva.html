@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservar su cita</title>
+</head>
+<body>
+<h2>ᾠ Reservar su cita</h2>
+
+<label>Especialidad:</label>
+<select id="especialidad"></select><br><br>
+
+<label>Médico:</label>
+<select id="medico"></select><br><br>
+
+<label>Día:</label>
+<select id="dia"></select><br><br>
+
+<label>Turno:</label>
+<select id="turno"></select><br><br>
+
+<label>Fecha:</label>
+<input type="date" id="fecha"><br><br>
+
+<button onclick="cargarHorarios()">Buscar horarios disponibles</button>
+
+<div id="horas"></div>
+
+<script>
+    const backend = "http://localhost:8080/api";
+
+    async function cargarEspecialidades() {
+        const res = await fetch(`${backend}/medicos/especialidades`);
+        const data = await res.json();
+        const select = document.getElementById("especialidad");
+        select.innerHTML = "<option disabled selected>Seleccione</option>";
+        data.forEach(e => {
+            select.innerHTML += `<option value="${e}">${e}</option>`;
+        });
+    }
+
+    async function cargarMedicos() {
+        const especialidad = document.getElementById("especialidad").value;
+        const res = await fetch(`${backend}/medicos/por-especialidad?especialidad=${especialidad}`);
+        const data = await res.json();
+        const select = document.getElementById("medico");
+        select.innerHTML = "<option disabled selected>Seleccione</option>";
+        data.forEach(m => {
+            select.innerHTML += `<option value="${m.id}">${m.nombres} ${m.apellidos}</option>`;
+        });
+
+        document.getElementById("dia").innerHTML = "";
+        document.getElementById("turno").innerHTML = "";
+        document.getElementById("horas").innerHTML = "";
+    }
+
+    async function cargarDias() {
+        const medicoId = document.getElementById("medico").value;
+        const res = await fetch(`${backend}/horarios/dias?medicoId=${medicoId}`);
+        const data = await res.json();
+        const select = document.getElementById("dia");
+        select.innerHTML = "<option disabled selected>Seleccione</option>";
+        data.forEach(dia => {
+            select.innerHTML += `<option value="${dia}">${dia}</option>`;
+        });
+
+        document.getElementById("turno").innerHTML = "";
+        document.getElementById("horas").innerHTML = "";
+    }
+
+    async function cargarTurnos() {
+        const medicoId = document.getElementById("medico").value;
+        const dia = document.getElementById("dia").value;
+        const res = await fetch(`${backend}/horarios/turnos?medicoId=${medicoId}&dia=${dia}`);
+        const data = await res.json();
+        const select = document.getElementById("turno");
+        select.innerHTML = "<option disabled selected>Seleccione</option>";
+        data.forEach(t => {
+            select.innerHTML += `<option value="${t}">${t}</option>`;
+        });
+
+        document.getElementById("horas").innerHTML = "";
+    }
+
+    async function cargarHorarios() {
+        const medicoId = document.getElementById("medico").value;
+        let dia = document.getElementById("dia").value;
+        dia = dia.normalize("NFD").replace(/[̀-ͯ]/g, ""); // quita tildes
+        const turno = document.getElementById("turno").value;
+        const fecha = document.getElementById("fecha").value;
+
+        if (!medicoId || !dia || !turno || !fecha) {
+            alert("Completa todos los campos");
+            return;
+        }
+
+        try {
+            const res = await fetch(`${backend}/horarios/disponibles?medicoId=${medicoId}&dia=${dia}&turno=${turno}&fecha=${fecha}`);
+            const data = await res.json();
+
+            if (!Array.isArray(data)) {
+                throw new Error("Respuesta no válida del servidor: " + JSON.stringify(data));
+            }
+
+            const contenedor = document.getElementById("horas");
+            contenedor.innerHTML = "<label>🕒 Horas disponibles:</label><br>";
+
+            if (data.length === 0) {
+                contenedor.innerHTML += "<p>No hay horarios disponibles</p>";
+            } else {
+                const select = document.createElement("select");
+                select.id = "horaDisponible";
+
+                const defaultOption = document.createElement("option");
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                defaultOption.textContent = "Seleccione una hora";
+                select.appendChild(defaultOption);
+
+                data.forEach(hora => {
+                    const option = document.createElement("option");
+                    option.value = hora;
+                    option.textContent = hora;
+                    select.appendChild(option);
+                });
+
+                contenedor.appendChild(select);
+                contenedor.appendChild(document.createElement("br"));
+                contenedor.appendChild(document.createElement("br"));
+
+                const btn = document.createElement("button");
+                btn.textContent = "Reservar cita";
+                btn.onclick = reservarDesdeSelect;
+                contenedor.appendChild(btn);
+            }
+        } catch (error) {
+            console.error("Error al cargar horarios:", error);
+            alert("Error al buscar horarios disponibles");
+        }
+    }
+
+    async function reservarDesdeSelect() {
+        const hora = document.getElementById("horaDisponible").value;
+        if (!hora) {
+            alert("Selecciona una hora");
+            return;
+        }
+        await reservar(hora);
+    }
+
+    async function reservar(hora) {
+        const fecha = document.getElementById("fecha").value;
+        const fechaHora = `${fecha}T${hora}`;
+        const pacienteId = 1; // harcodeado por ahora
+        const medicoId = document.getElementById("medico").value;
+
+        const body = {
+            pacienteId: pacienteId,
+            medicoId: medicoId,
+            fechaHora: fechaHora,
+            motivo: "Consulta general"
+        };
+
+        const res = await fetch(`${backend}/citas/reservar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+
+        const text = await res.text();
+        alert(text);
+    }
+
+    document.getElementById("especialidad").addEventListener("change", cargarMedicos);
+    document.getElementById("medico").addEventListener("change", cargarDias);
+    document.getElementById("dia").addEventListener("change", cargarTurnos);
+
+    window.onload = cargarEspecialidades;
+</script>
+</body>
+</html>
