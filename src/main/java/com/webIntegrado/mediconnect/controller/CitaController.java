@@ -1,11 +1,13 @@
 package com.webIntegrado.mediconnect.controller;
 
-import com.webIntegrado.mediconnect.model.Cita;
+
 import com.webIntegrado.mediconnect.model.CitaRequest;
 import com.webIntegrado.mediconnect.model.Usuario;
 import com.webIntegrado.mediconnect.repository.UsuarioRepository;
 import com.webIntegrado.mediconnect.repository.PacienteRepository;
 import com.webIntegrado.mediconnect.service.CitaService;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ public class CitaController {
 
     @Autowired
     private PacienteRepository pacienteRepo;
+
 
     @PostMapping("/reservar")
     public ResponseEntity<String> reservarCita(@RequestBody CitaRequest request, Authentication auth) {
@@ -44,4 +47,6 @@ public class CitaController {
 
         return ResponseEntity.ok(mensaje);
     }
+    
+
 }

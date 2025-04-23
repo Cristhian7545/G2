@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Citas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f0f4f8;
+        }
+
+        tbody tr:hover {
+            background-color: #e3f2fd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Listado de Citas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Especialidad</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="detalle : ${citas}">
+                <td th:text="${#temporals.format(detalle.cita.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${detalle.paciente.nombres + ' ' + detalle.paciente.apellidos}"></td>
+                <td th:text="${detalle.medico.nombres + ' ' + detalle.medico.apellidos}"></td>
+                <td th:text="${detalle.medico.especialidad}"></td>
+                <td th:text="${detalle.cita.motivo}"></td>
+                <td th:text="${detalle.cita.estado}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

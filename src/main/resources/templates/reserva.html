@@ -3,6 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Reservar Cita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f2f6fc;
+            padding: 30px;
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        form {
+            max-width: 600px;
+            background-color: #ffffff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 15px 0 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #d0d7e1;
+            border-radius: 6px;
+            font-size: 15px;
+            background-color: #fdfdfd;
+        }
+
+        select:invalid {
+            color: #999;
+        }
+
+        button {
+            background-color: #1976d2;
+            color: white;
+            font-size: 16px;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #115293;
+        }
+
+        #horas {
+            margin-top: 10px;
+        }
+
+        option[disabled] {
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,42 +83,41 @@
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="hidden" id="fechaHoraFinal" name="fechaHora" />
 
-    <label>Especialidad:</label>
-    <select id="especialidad">
+    <label for="especialidad">Especialidad:</label>
+    <select id="especialidad" required>
         <option disabled selected hidden>Seleccione</option>
-    </select><br><br>
+    </select>
 
-    <label>Médico:</label>
-    <select id="medico" name="medicoId">
+    <label for="medico">Médico:</label>
+    <select id="medico" name="medicoId" required>
         <option disabled selected hidden>Seleccione</option>
-    </select><br><br>
+    </select>
 
-    <label>Día:</label>
-    <select id="dia">
+    <label for="dia">Día:</label>
+    <select id="dia" required>
         <option disabled selected hidden>Seleccione</option>
-    </select><br><br>
+    </select>
 
-    <label>Turno:</label>
-    <select id="turno">
+    <label for="turno">Turno:</label>
+    <select id="turno" required>
         <option disabled selected hidden>Seleccione</option>
-    </select><br><br>
+    </select>
 
-    <label>Fecha:</label>
-    <input type="date" id="fecha" name="fecha"><br><br>
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" required>
 
-    <label>Motivo:</label>
-    <input type="text" id="motivo" name="motivo" placeholder="Motivo de la cita" /><br><br>
+    <label for="motivo">Motivo:</label>
+    <input type="text" id="motivo" name="motivo" placeholder="Motivo de la cita" required />
 
     <div id="horas">
-        <label>🕒 Horas disponibles:</label><br>
-        <select id="horaDisponible">
+        <label for="horaDisponible">🕒 Horas disponibles:</label>
+        <select id="horaDisponible" required>
             <option disabled selected hidden>Seleccione una hora</option>
         </select>
-    </div><br>
+    </div>
 
     <button type="button" onclick="enviarReserva()">Reservar cita</button>
 </form>
-
 <script th:inline="javascript">
     const backend = /*[[@{/api}]]*/ "";
 
