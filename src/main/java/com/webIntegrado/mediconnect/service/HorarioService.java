@@ -44,7 +44,7 @@ public class HorarioService {
 
         List<LocalTime> disponibles = new ArrayList<>(intervalos);
         for (Cita cita : ocupadas) {
-            disponibles.remove(cita.getFechaHora().toLocalTime());
+            disponibles.removeIf(hora -> hora.equals(cita.getFechaHora().toLocalTime()));
         }
 
         return disponibles;

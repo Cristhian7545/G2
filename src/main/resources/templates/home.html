@@ -5,15 +5,16 @@
     <title>Inicio</title>
 </head>
 <body>
-<h2 th:if="${#authentication != null}">Bienvenido, <span th:text="${#authentication.name}">Usuario</span></h2>
 
+<h2 th:if="${#authentication != null}">Bienvenido, <span th:text="${#authentication.name}">Usuario</span></h2>
 
 <form th:action="@{/logout}" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <button type="submit">Cerrar sesión</button>
 </form>
 
-<p>Ir a <a href="/reserva.html">Reserva de cita</a></p>
+<p>Ir a <a th:href="@{/reserva}">Reserva de cita</a></p>
+
 </body>
 </html>
 

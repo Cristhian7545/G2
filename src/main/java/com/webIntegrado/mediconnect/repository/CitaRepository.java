@@ -8,5 +8,4 @@ import java.util.List;
 public interface CitaRepository extends JpaRepository<Cita, Long> {
     boolean existsByMedicoIdAndFechaHora(Long medicoId, LocalDateTime fechaHora);
     List<Cita> findByMedicoIdAndFechaHoraBetween(Long medicoId, LocalDateTime desde, LocalDateTime hasta);
-
 }

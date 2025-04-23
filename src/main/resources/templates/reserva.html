@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservar Cita</title>
+</head>
+<body>
+
+<h2>Reservar su cita</h2>
+
+<form id="form-reserva" th:action="@{/api/citas/reservar}" method="post" th:object="${citaRequest}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="hidden" id="fechaHoraFinal" name="fechaHora" />
+
+    <label>Especialidad:</label>
+    <select id="especialidad">
+        <option disabled selected hidden>Seleccione</option>
+    </select><br><br>
+
+    <label>Médico:</label>
+    <select id="medico" name="medicoId">
+        <option disabled selected hidden>Seleccione</option>
+    </select><br><br>
+
+    <label>Día:</label>
+    <select id="dia">
+        <option disabled selected hidden>Seleccione</option>
+    </select><br><br>
+
+    <label>Turno:</label>
+    <select id="turno">
+        <option disabled selected hidden>Seleccione</option>
+    </select><br><br>
+
+    <label>Fecha:</label>
+    <input type="date" id="fecha" name="fecha"><br><br>
+
+    <label>Motivo:</label>
+    <input type="text" id="motivo" name="motivo" placeholder="Motivo de la cita" /><br><br>
+
+    <div id="horas">
+        <label>🕒 Horas disponibles:</label><br>
+        <select id="horaDisponible">
+            <option disabled selected hidden>Seleccione una hora</option>
+        </select>
+    </div><br>
+
+    <button type="button" onclick="enviarReserva()">Reservar cita</button>
+</form>
+
+<script th:inline="javascript">
+    const backend = /*[[@{/api}]]*/ "";
+
+    const diasSemana = {
+        "Domingo": 0,
+        "Lunes": 1,
+        "Martes": 2,
+        "Miércoles": 3,
+        "Miercoles": 3,
+        "Jueves": 4,
+        "Viernes": 5,
+        "Sábado": 6,
+        "Sabado": 6
+    };
+
+    async function cargarEspecialidades() {
+        const res = await fetch(`${backend}/medicos/especialidades`);
+        const data = await res.json();
+        const select = document.getElementById("especialidad");
+        select.innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        data.forEach(e => {
+            select.innerHTML += `<option value="${e}">${e}</option>`;
+        });
+    }
+
+    async function cargarMedicos() {
+        const especialidad = document.getElementById("especialidad").value;
+        const res = await fetch(`${backend}/medicos/por-especialidad?especialidad=${especialidad}`);
+        const data = await res.json();
+        const select = document.getElementById("medico");
+        select.innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        data.forEach(m => {
+            select.innerHTML += `<option value="${m.id}">${m.nombres} ${m.apellidos}</option>`;
+        });
+
+        document.getElementById("dia").innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        document.getElementById("turno").innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        document.getElementById("horaDisponible").innerHTML = "<option disabled selected hidden>Seleccione una hora</option>";
+    }
+
+    async function cargarDias() {
+        const medicoId = document.getElementById("medico").value;
+        const res = await fetch(`${backend}/horarios/dias?medicoId=${medicoId}`);
+        const data = await res.json();
+        const select = document.getElementById("dia");
+        select.innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        data.forEach(dia => {
+            select.innerHTML += `<option value="${dia}">${dia}</option>`;
+        });
+
+        document.getElementById("turno").innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        document.getElementById("horaDisponible").innerHTML = "<option disabled selected hidden>Seleccione una hora</option>";
+    }
+
+    async function cargarTurnos() {
+        const medicoId = document.getElementById("medico").value;
+        const dia = document.getElementById("dia").value;
+        const res = await fetch(`${backend}/horarios/turnos?medicoId=${medicoId}&dia=${dia}`);
+        const data = await res.json();
+        const select = document.getElementById("turno");
+        select.innerHTML = "<option disabled selected hidden>Seleccione</option>";
+        data.forEach(t => {
+            select.innerHTML += `<option value="${t}">${t}</option>`;
+        });
+
+        document.getElementById("horaDisponible").innerHTML = "<option disabled selected hidden>Seleccione una hora</option>";
+    }
+
+    async function cargarHorarios() {
+        const medicoId = document.getElementById("medico").value;
+        const diaSeleccionadoTexto = document.getElementById("dia").value;
+        const turno = document.getElementById("turno").value;
+        const fechaInput = document.getElementById("fecha");
+        const fecha = fechaInput.value;
+
+        if (!medicoId || !diaSeleccionadoTexto || !turno || !fecha) return;
+
+        const fechaDate = new Date(fecha + "T00:00:00");
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const diaFecha = fechaDate.getDay();
+
+        if (fechaDate <= hoy) {
+            alert("La fecha debe ser posterior al día actual.");
+            fechaInput.value = "";
+            return;
+        }
+
+        if (diaFecha === 0) {
+            alert("No se puede seleccionar domingo.");
+            fechaInput.value = "";
+            return;
+        }
+
+        if (diasSemana[diaSeleccionadoTexto] === undefined) {
+            alert("El día seleccionado no es válido.");
+            fechaInput.value = "";
+            return;
+        }
+
+        if (diaFecha !== diasSemana[diaSeleccionadoTexto]) {
+            alert(`La fecha debe coincidir con un ${diaSeleccionadoTexto}.`);
+            fechaInput.value = "";
+            return;
+        }
+
+        const res = await fetch(`${backend}/horarios/disponibles?medicoId=${medicoId}&dia=${diaSeleccionadoTexto}&turno=${turno}&fecha=${fecha}`);
+        const data = await res.json();
+
+        const select = document.getElementById("horaDisponible");
+        select.innerHTML = "<option disabled selected hidden>Seleccione una hora</option>";
+
+        if (data.length === 0) {
+            select.innerHTML += `<option disabled>No hay horarios disponibles</option>`;
+        } else {
+            data.forEach(hora => {
+                select.innerHTML += `<option value="${hora}">${hora}</option>`;
+            });
+        }
+    }
+
+    async function enviarReserva() {
+        const form = document.getElementById("form-reserva");
+
+        const medicoId = document.getElementById("medico").value;
+        const fecha = document.getElementById("fecha").value;
+        const hora = document.getElementById("horaDisponible").value;
+        const motivo = document.getElementById("motivo").value;
+
+        if (!medicoId || !fecha || !hora || !motivo) {
+            alert("Completa todos los campos antes de reservar");
+            return;
+        }
+
+        const fechaHora = `${fecha}T${hora}`;
+        document.getElementById("fechaHoraFinal").value = fechaHora;
+
+        const body = {
+            medicoId: medicoId,
+            fechaHora: fechaHora,
+            motivo: motivo
+        };
+
+        const csrf = form.querySelector("input[name='_csrf']").value;
+
+        const res = await fetch(form.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrf
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+            const mensaje = await res.text();
+            alert("✅ " + mensaje);
+            window.location.href = "/home";
+        } else {
+            const err = await res.text();
+            alert("❌ Error al reservar: " + err);
+        }
+    }
+
+    document.getElementById("especialidad").addEventListener("change", cargarMedicos);
+    document.getElementById("medico").addEventListener("change", cargarDias);
+    document.getElementById("dia").addEventListener("change", () => {
+        cargarTurnos();
+        document.getElementById("fecha").value = "";
+        document.getElementById("horaDisponible").innerHTML = "<option disabled selected hidden>Seleccione una hora</option>";
+    });
+    document.getElementById("turno").addEventListener("change", cargarHorarios);
+    document.getElementById("fecha").addEventListener("change", cargarHorarios);
+
+    window.onload = cargarEspecialidades;
+</script>
+
+</body>
+</html>
+
