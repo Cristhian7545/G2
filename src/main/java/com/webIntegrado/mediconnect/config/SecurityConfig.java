@@ -19,10 +19,10 @@ public class SecurityConfig {
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/register", "/login", "/css/**", "/js/**", "/images/**", "/static/**", "/reserva.html"
-                        ).permitAll()
-                        .requestMatchers("/", "/home").authenticated()
-                        .anyRequest().authenticated()
+                                "/register", "/login", "/css/**", "/js/**", "/images/**", "/static/**", "/", "/home"
+                        ).permitAll() // home accesible sin login
+                        .requestMatchers("/reserva", "/citas", "/api/**").authenticated() // protegidas
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -31,7 +31,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/home")
                         .permitAll()
                 );
 

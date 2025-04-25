@@ -1,0 +1,22 @@
+<!-- header.html -->
+<div th:fragment="navbar">
+    <nav class="navbar">
+        <div class="header-wrapper">
+            <a class="navbar-brand" href="/">
+                <img src="/img/logitoo.png" alt="Logo" />
+            </a>
+            <ul class="navbar-nav flex-row align-items-center">
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-house"></i> Nosotros</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-gauge"></i> Red</a></li>
+                <li class="nav-item"><a class="nav-link" href="/servicios"><i class="fa-solid fa-table-cells"></i> Servicios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-border-all"></i> Médicos</a></li>
+                <li class="nav-item" th:if="${#authentication == null}">
+                    <a class="nav-link" href="/login"><i class="fa-solid fa-user"></i> Iniciar sesión</a>
+                </li>
+                <li class="nav-item" th:if="${#authentication != null}">
+                    <a class="nav-link" href="/logout"><i class="fa-solid fa-user-minus"></i> Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

@@ -6,19 +6,31 @@
 </head>
 <body>
 
-<h2 th:if="${#authentication != null}">Bienvenido, <span th:text="${#authentication.name}">Usuario</span></h2>
+<!-- Bienvenida solo si ha iniciado sesión -->
+<div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
+    <h2>Bienvenido, <span th:text="${#authentication.name}">Usuario</span></h2>
+</div>
 
-<form th:action="@{/logout}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <button type="submit">Cerrar sesión</button>
-</form>
-
-<p>Ir a <a th:href="@{/reserva}">Reserva de cita</a></p>
-<a href="/citas">
+<!-- Botones siempre visibles (la protección está en el backend vía Spring Security) -->
+<p><a th:href="@{/reserva}">Reserva de cita</a></p>
+<a th:href="@{/citas}">
     <button>Ver Citas</button>
 </a>
 
+<!-- Mostrar solo si NO ha iniciado sesión -->
+<div th:if="${#authentication == null or #authentication.name == 'anonymousUser'}">
+    <p><a th:href="@{/login}">Iniciar sesión</a></p>
+</div>
+
+<!-- Mostrar solo si ha iniciado sesión -->
+<div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
+    <form th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">Cerrar sesión</button>
+    </form>
+</div>
 
 </body>
 </html>
+
 
