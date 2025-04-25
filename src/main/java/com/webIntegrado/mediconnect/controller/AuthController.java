@@ -16,10 +16,11 @@ public class AuthController {
     private UsuarioService usuarioService;
 
     // Página de inicio post-login
-    @GetMapping({"/", "/home"})
+    @GetMapping("/")
     public String mostrarHome() {
-        return "home"; // templates/home.html
+        return "redirect:/nosotros";
     }
+
 
     // Mostrar formulario de login
     @GetMapping("/login")
