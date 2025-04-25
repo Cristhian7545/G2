@@ -284,7 +284,7 @@
         if (res.ok) {
             const mensaje = await res.text();
             alert("✅ " + mensaje);
-            window.location.href = "/home";
+            window.location.href = "/citas";
         } else {
             const err = await res.text();
             alert("❌ Error al reservar: " + err);

@@ -68,4 +68,26 @@ public class CitaService {
         return citasConDetalles;
     }
 
+    public List<CitaConDetalles> obtenerCitasPorUsuarioId(Long usuarioId) {
+        Optional<Paciente> pacienteOpt = pacienteRepository.findByUsuarioId(usuarioId);
+        if (pacienteOpt.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        Long pacienteId = pacienteOpt.get().getId_paciente();
+        List<Cita> citas = citaRepository.findByPacienteId(pacienteId);
+
+        List<CitaConDetalles> citasConDetalles = new ArrayList<>();
+        for (Cita cita : citas) {
+            Optional<Medico> medico = medicoRepository.findById(cita.getMedicoId());
+
+            if (medico.isPresent()) {
+                citasConDetalles.add(new CitaConDetalles(cita, pacienteOpt.get(), medico.get()));
+            }
+        }
+
+        return citasConDetalles;
+    }
+
+
 }
