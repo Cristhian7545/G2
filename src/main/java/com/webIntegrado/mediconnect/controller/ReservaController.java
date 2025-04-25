@@ -43,5 +43,10 @@ public class ReservaController {
     public String mostrarPaginaServicioEvento() {
         return "servicio-evento"; // Thymeleaf busca templates/servicios.html
     }
+
+    @GetMapping("/medico")
+    public String mostrarPaginaMedico() {
+        return "medico"; // Thymeleaf busca templates/servicios.html
+    }
 }
 
