@@ -1,39 +1,153 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Registro</title>
+
+  <!-- CSS y JS en orden correcto -->
+  <link rel="stylesheet" href="/css/header.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/register.css" />
+
 </head>
 <body>
-<h2>Registro de paciente</h2>
 
-<form th:action="@{/register}" th:object="${registroForm}" method="post">
-  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<!-- ✅ Header importado correctamente -->
+<div th:replace="fragments/header :: navbar"></div>
 
-  <label>Usuario:</label><br>
-  <input type="text" th:field="*{username}" required/><br><br>
+<div class="container register-container">
+  <div class="row g-0">
+    <!-- Columna de formulario -->
+    <div class="col-lg-6 register-form">
+      <div class="text-center mb-5">
+        <i class="bi bi-person-plus-fill logo"></i>
+        <h1 class="h3 fw-bold">Crear Cuenta</h1>
+        <p class="text-muted">Completa tus datos para registrarte</p>
+      </div>
 
-  <label>Email:</label><br>
-  <input type="email" th:field="*{email}" required/><br><br>
+      <form th:action="@{/register}" th:object="${registroForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="nombres" class="form-label fw-medium">Nombres</label>
+              <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person-vcard"></i>
+                                    </span>
+                <input type="text" th:field="*{nombres}" class="form-control" id="nombres" name="nombres" required/><br><br>
+              </div>
+            </div>
+          </div>
 
-  <label>Contraseña:</label><br>
-  <input type="password" th:field="*{password}" required/><br><br>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="apellidos" class="form-label fw-medium">Apellidos</label>
+              <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person-vcard"></i>
+                                    </span>
+                <input  type="text" th:field="*{apellidos}" class="form-control" id="apellidos" name="apellidos" required>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <label>Nombres:</label><br>
-  <input type="text" th:field="*{nombres}" required/><br><br>
+        <div class="mb-3">
+          <label for="usuario" class="form-label fw-medium">Nombre de Usuario</label>
+          <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person-badge"></i>
+                            </span>
+            <input type="text" th:field="*{username}" class="form-control" id="usuario" name="usuario" required>
+          </div>
+        </div>
 
-  <label>Apellidos:</label><br>
-  <input type="text" th:field="*{apellidos}" required/><br><br>
+        <div class="mb-3">
+          <label for="email" class="form-label fw-medium">Correo Electrónico</label>
+          <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope-at"></i>
+                            </span>
+            <input type="email" th:field="*{email}" class="form-control" id="email" name="email" required>
+          </div>
+        </div>
 
-  <label>Teléfono:</label><br>
-  <input type="text" th:field="*{telefono}" /><br><br>
+        <div class="mb-3">
+          <label for="password" class="form-label fw-medium">Contraseña</label>
+          <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+            <input type="password" th:field="*{password}" class="form-control" id="password" name="password" required>
+          </div>
+          <div class="form-text">Mínimo 8 caracteres con números y símbolos</div>
+        </div>
 
-  <label>Dirección:</label><br>
-  <input type="text" th:field="*{direccion}" /><br><br>
+        <div class="mb-3">
+          <label for="telefono" class="form-label fw-medium">Teléfono</label>
+          <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-telephone"></i>
+                            </span>
+            <input type="tel" th:field="*{telefono}" class="form-control" id="telefono" name="telefono" required>
+          </div>
+        </div>
 
-  <button type="submit">Registrarme</button>
-</form>
+        <div class="mb-4">
+          <label for="direccion" class="form-label fw-medium">Dirección</label>
+          <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
+            <textarea th:field="*{direccion}" class="form-control" id="direccion" name="direccion" rows="2" required></textarea>
+          </div>
+        </div>
 
-<p>¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="checkbox" id="terms" required>
+          <label class="form-check-label" for="terms">
+            Acepto los <a href="#" class="text-decoration-none">Términos y Condiciones</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 btn-register">
+          Registrar Cuenta
+        </button>
+
+
+        <div class="additional-links">
+          ¿Ya tienes una cuenta? <a th:href="@{/login}" class="text-decoration-none">Inicia Sesión</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Columna de imagen -->
+    <div class="col-lg-6 d-none d-lg-block register-image">
+      <div class="d-flex flex-column h-100 justify-content-center align-items-center">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer insertado -->
+<div th:replace="fragments/footer :: footer"></div>
+<script>
+  // Mostrar/ocultar contraseña
+  document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.querySelector('i').classList.toggle('bi-eye');
+    this.querySelector('i').classList.toggle('bi-eye-slash');
+  });
+</script>
+<!-- Opcional: scripts de Bootstrap y/o para el toggle de contraseña -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 </html>

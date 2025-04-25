@@ -13,4 +13,35 @@ public class ReservaController {
         model.addAttribute("citaRequest", new CitaRequest());
         return "reserva"; // Thymeleaf busca en templates/reserva.html
     }
+
+    @GetMapping("/servicios")
+    public String mostrarPaginaServicios() {
+        return "servicios"; // Thymeleaf busca templates/servicios.html
+    }
+
+    @GetMapping("/red")
+    public String mostrarPaginaRed() {
+        return "red"; // Thymeleaf busca templates/servicios.html
+    }
+
+    @GetMapping("/nosotros")
+    public String mostrarPaginaNosotros() {
+        return "nosotros"; // Thymeleaf busca templates/servicios.html
+    }
+
+    @GetMapping("/contacto")
+    public String mostrarPaginaContacto() {
+        return "contacto"; // Thymeleaf busca templates/servicios.html
+    }
+
+    @GetMapping("/servicio-persona")
+    public String mostrarPaginaServicioPersona() {
+        return "servicio-persona"; // Thymeleaf busca templates/servicios.html
+    }
+
+    @GetMapping("/servicio-evento")
+    public String mostrarPaginaServicioEvento() {
+        return "servicio-evento"; // Thymeleaf busca templates/servicios.html
+    }
 }
+

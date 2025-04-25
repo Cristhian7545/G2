@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Inicio</title>
+
+    <!-- CSS y JS en orden correcto -->
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/sucursales.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .sucursal {
+            flex: 1 1 30%;
+            max-width: 30%;
+            min-width: 250px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ✅ Header importado correctamente -->
+<div th:replace="fragments/header :: navbar"></div>
+
+<!-- Hero con imagen de fondo -->
+<section class="hero-section text-white d-flex align-items-center" style="background: url('/img/sede5.jpg') center/cover no-repeat; height: 500px;">
+    <div class="container">
+        <div class="text-start ps-md-5">
+            <h1 class="fw-bold mb-3">Estamos siempre cerca para darte una mejor atención</h1>
+            <div class="d-flex gap-3">
+                <a th:href="@{/reserva}" class="btn btn-primary btn-lg">Agendar tu cita</a>
+                <a th:href="@{/citas}" class="btn btn-light btn-lg text-dark border border-white">Ver citas</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="fondo-section">
+    <div class="col">
+        <div class="row justify-content-center align-items-center p-5 m-5 border border-black">
+            <div class="text-center">
+                <i class="bi bi-eye-fill" style="font-size: 4rem; color:#006C84;"></i>
+            </div>
+            <h2 class="fw-bold text-center mb-5">NUESTRAS SUCURSALES</h2>
+            <div class="filter row justify-content-center align-items-center">
+                <div class="col-12 col-sm-3 text-center">
+                    <label for="region" class="form-label">Filtrar por región:</label>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <select id="region" class="form-select">
+                        <option value="all">Todo</option>
+                        <option value="piura">Piura</option>
+                        <option value="arequipa">Arequipa</option>
+                        <option value="lima">Lima</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <button onclick="filterSucursales()" class="btn btn-dark w-100 mt-2 mt-sm-0">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="row p-5 m-5 border border-black">
+            <div class="sucursales row" id="sucursales">
+
+                <!-- Sucursal Piura -->
+                <div class="sucursal" data-region="piura" onclick="showModal('Clínica MediConect - Piura', 'Nuestra sede en Piura está ubicada frente a Promart, junto al estacionamiento de motocicletas. Accede por la Puerta del Jirón H para recibir atención médica de calidad con equipos modernos y personal especializado.', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63574.88794285284!2d-80.70808545136718!3d-5.194819700000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x904a107f68f622ff%3A0xb2d68b7546c8503a!2sCl%C3%ADnica%20San%20Miguel%20de%20La%20Red%20Cl%C3%ADnica%20Internacional!5e0!3m2!1ses-419!2spe!4v1745544389753!5m2!1ses-419!2spe')"
+                >
+                    <img src="/img/sede1.jpg" alt="Clínica MediConect Piura">
+                    <h2 class="fw-bold text-center mt-3" style="font-size: 1.2rem; color: #333; text-align: center; margin-top: 10px;">Clínica MediConect Piura</h2>
+                </div>
+
+                <!-- Sucursal Arequipa -->
+                <div class="sucursal" data-region="arequipa" onclick="showModal('Clínica MediConect - Arequipa', 'Visítanos en el segundo piso del Mall Aventura, en Av. Porongoche 500. Nuestra sede cuenta con servicios especializados en medicina general, pediatría y diagnóstico por imágenes.', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61236.02113463862!2d-71.57730535512226!3d-16.412057635256893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424a42086cf8d5%3A0xb6b0b4bb26fe4882!2sCl%C3%ADnica%20San%20Juan%20de%20Dios%20Arequipa!5e0!3m2!1ses-419!2spe!4v1745544485612!5m2!1ses-419!2spe')"
+                >
+                    <img src="/img/sede6.jpg" alt="Clínica MediConect Arequipa Camaná">
+                    <h2 class="fw-bold text-center mt-3" style="font-size: 1.2rem; color: #333; text-align: center; margin-top: 10px;">Clínica MediConect Arequipa Camaná</h2>
+                </div>
+
+                <!-- Sucursal Arequipa -->
+                <div class="sucursal" data-region="arequipa" onclick="showModal('Clínica MediConect - Arequipa', 'Visítanos en el segundo piso del Mall Aventura, en Av. Porongoche 500. Nuestra sede cuenta con servicios especializados en medicina general, pediatría y diagnóstico por imágenes.', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61236.02113463862!2d-71.57730535512226!3d-16.412057635256893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424a42086cf8d5%3A0xb6b0b4bb26fe4882!2sCl%C3%ADnica%20San%20Juan%20de%20Dios%20Arequipa!5e0!3m2!1ses-419!2spe!4v1745544485612!5m2!1ses-419!2spe')"
+                >
+                    <img src="/img/sede4.jpg" alt="Clínica MediConect Arequipa Centro">
+                    <h2 class="fw-bold text-center mt-3" style="font-size: 1.2rem; color: #333; text-align: center; margin-top: 10px;">Clínica MediConect Arequipa Centro</h2>
+                </div>
+
+                <!-- Sucursal Lima Centro -->
+                <div class="sucursal" data-region="lima" onclick="showModal('Clínica MediConect - Lima Centro', 'Ubicados en Lima Centro, tercer piso. Contamos con atención médica ambulatoria, controles preventivos y orientación psicológica.', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62429.38921493152!2d-77.09311092737387!3d-12.054745724606377!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c87b8819d459%3A0x6da256a012fc08ab!2sCl%C3%ADnica%20Ricardo%20Palma!5e0!3m2!1ses-419!2spe!4v1745544514314!5m2!1ses-419!2spe')"
+                >
+                    <img src="/img/sede2.jpg" alt="Clínica MediConect Lima Centro">
+                    <h2 class="fw-bold text-center mt-3" style="font-size: 1.2rem; color: #333; text-align: center; margin-top: 10px;">Clínica MediConect Lima Centro</h2>
+                </div>
+
+                <!-- Sucursal Lima Norte -->
+                <div class="sucursal" data-region="lima" onclick="showModal('Clínica MediConect - Lima Norte', 'Nuestra sede en Lima Norte ofrece atención integral, con especialidades médicas y servicios de laboratorio.', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124860.34283114265!2d-77.14335836121877!3d-12.051383700914354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x456adf987e2477d%3A0x31167f7cd10d7d0d!2sCl%C3%ADnica%20Jes%C3%BAs%20del%20Norte!5e0!3m2!1ses-419!2spe!4v1745544536997!5m2!1ses-419!2spe')"
+                >
+                    <img src="/img/sede3.jpg" alt="Clínica MediConect Lima Norte">
+                    <h2 class="fw-bold text-center mt-3" style="font-size: 1.2rem; color: #333; text-align: center; margin-top: 10px;">Clínica MediConect Lima Norte</h2>
+                </div>
+
+                <!-- Sucursal Lima Sur -->
+                <div class="sucursal" data-region="lima" onclick="showModal('Clínica MediConect - Lima Sur', 'En nuestra sede de Lima Sur brindamos atención pediátrica, medicina interna y vacunación.', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124860.35408931594!2d-77.14335860924473!3d-12.051359502848742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105b7804ac66ee1%3A0x97975ccf585087f6!2sCentro%20M%C3%A9dico%20Plaza%20Lima%20Sur%20de%20la%20Cl%C3%ADnica%20Ricardo%20Palma!5e0!3m2!1ses-419!2spe!4v1745544559115!5m2!1ses-419!2spe')"
+                >
+                    <img src="/img/sede5.jpg" alt="Clínica MediConect Lima Sur">
+                    <h2 class="fw-bold text-center mt-3" style="font-size: 1.2rem; color: #333; text-align: center; margin-top: 10px;">Clínica MediConect Lima Sur</h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <!-- Modal -->
+    <div id="mapModal" class="modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000;">
+        <div class="modal-content" style="background: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 600px; position: relative;">
+            <span class="close" onclick="closeModal()" style="position: absolute; top: 10px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+            <iframe id="modalMap" src="" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+
+
+</section>
+
+<!-- Footer insertado -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script>
+    // Función para filtrar las sucursales según la región seleccionada
+    function filterSucursales() {
+        const selectedRegion = document.getElementById('region').value;
+        const sucursales = document.querySelectorAll('.sucursal');
+
+        sucursales.forEach(sucursal => {
+            const region = sucursal.getAttribute('data-region');
+            // Mostrar o esconder la sucursal dependiendo de la región seleccionada
+            sucursal.style.display = (selectedRegion === 'all' || selectedRegion === region) ? 'block' : 'none';
+        });
+    }
+
+    // Función para mostrar el modal con la información de la sucursal
+    function showModal(title, description, mapSrc) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDescription').textContent = description;
+        document.getElementById('modalMap').src = mapSrc; // Establece el mapa correspondiente
+        document.getElementById('mapModal').style.display = 'block'; // Muestra el modal
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+        document.getElementById('mapModal').style.display = 'none'; // Oculta el modal
+        document.getElementById('modalMap').src = ""; // Limpia la URL del iframe
+    }
+
+    // Cierra el modal si el usuario hace clic fuera de él
+    window.onclick = function(event) {
+        const modal = document.getElementById('mapModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+</script>
+<!-- JS al final del body (recomendado) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
