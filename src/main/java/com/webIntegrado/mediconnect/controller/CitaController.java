@@ -30,23 +30,22 @@ public class CitaController {
 
     @PostMapping("/reservar")
     public ResponseEntity<String> reservarCita(@RequestBody CitaRequest request, Authentication auth) {
-        // Obtener usuario logueado por email o username
         String email = auth.getName();
         Usuario usuario = usuarioRepo.findByEmailOrUsername(email, email).orElseThrow();
 
-        // Obtener ID de paciente
         Long pacienteId = pacienteRepo.findByUsuarioId(usuario.getId_usuario())
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado")).getId_paciente();
 
         String mensaje = citaService.reservarCita(
                 pacienteId,
                 request.getMedicoId(),
+                request.getSedeId(),       // <-- agregado aquí
                 request.getFechaHora(),
                 request.getMotivo()
         );
 
         return ResponseEntity.ok(mensaje);
     }
-    
+
 
 }

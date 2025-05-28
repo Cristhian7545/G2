@@ -5,8 +5,13 @@ import java.time.LocalDateTime;
 public class CitaRequest {
     private Long pacienteId;
     private Long medicoId;
+    private Long sedeId;
     private LocalDateTime fechaHora;
     private String motivo;
+
+
+// getter y setter
+
 
     public Long getPacienteId() {return pacienteId;}
     public void setPacienteId(Long pacienteId) {this.pacienteId = pacienteId;}
@@ -20,4 +25,6 @@ public class CitaRequest {
     public String getMotivo() {return motivo;}
     public void setMotivo(String motivo) {this.motivo = motivo;}
 
+    public Long getSedeId() { return sedeId; }
+    public void setSedeId(Long sedeId) { this.sedeId = sedeId;}
 }

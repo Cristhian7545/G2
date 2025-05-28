@@ -19,6 +19,17 @@ public class Medico {
     private String especialidad;
     private String telefono;
     private String consultorio;
+    @ManyToOne
+    @JoinColumn(name = "sede_id")
+    private Sede sede;
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
+    }
 
     // Getters y Setters
 

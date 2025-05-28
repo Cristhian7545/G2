@@ -16,6 +16,9 @@ public class Cita {
     private String motivo;
     private String estado = "Pendiente";
     private LocalDateTime fechaSolicitud = LocalDateTime.now();
+    @ManyToOne
+    @JoinColumn(name = "sede_id")
+    private Sede sede;
 
     // Getters y setters
 
@@ -40,4 +43,6 @@ public class Cita {
     public LocalDateTime getFechaSolicitud() {return fechaSolicitud;}
     public void setFechaSolicitud(LocalDateTime fechaSolicitud) {this.fechaSolicitud = fechaSolicitud;}
 
+    public Sede getSede() { return sede; }
+    public void setSede(Sede sede) { this.sede = sede; }
 }
