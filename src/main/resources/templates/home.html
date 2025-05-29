@@ -2,22 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>Mediconet – Inicio</title>
-  <!-- <link rel="stylesheet" th:href="@{/css/styles.css}" /> -->
+  <title>Mediconet – Inicio</title>
 </head>
 <body>
-  <header>
-    <h1>Bienvenido, <span th:text="${#authentication.name}">Usuario</span> !</h1>
-    <!-- Form de logout con CSRF -->
-    <form th:action="@{/logout}" method="post" style="display:inline">
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-      <button type="submit">Cerrar sesión</button>
-    </form>
-  </header>
+<header>
+  <h1>Bienvenido, <span th:text="${#authentication.name}">Usuario</span> !</h1>
+  <form th:action="@{/logout}" method="post" style="display:inline">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <button type="submit">Cerrar sesión</button>
+  </form>
+</header>
 
-  <main>
-    <p>Esta es tu página de inicio después de hacer login.</p>
-    <!-- Aquí puedes añadir enlaces a otras secciones, datos de usuario, etc. -->
-  </main>
+<main>
+  <p>Esta es tu página de inicio después de hacer login.</p>
+</main>
 </body>
 </html>

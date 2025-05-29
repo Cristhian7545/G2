@@ -3,9 +3,7 @@ package com.MediConnect.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuarios")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,28 +13,36 @@ public class Usuario {
     private String apellidoMaterno;
     private String dni;
     private String sexo;
-
-    @Column(unique = true)
     private String email;
-
     private String password;
 
-    // getters y setters
+    public Usuario() {}  // ¡muy importante!
+
+    // ↓↓↓ getters y setters para todos los campos ↓↓↓
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getNombre() { return nombre; }
-    public void setNombre(String n) { this.nombre = n; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
     public String getApellidoPaterno() { return apellidoPaterno; }
-    public void setApellidoPaterno(String a) { this.apellidoPaterno = a; }
+    public void setApellidoPaterno(String apellidoPaterno) { this.apellidoPaterno = apellidoPaterno; }
+
     public String getApellidoMaterno() { return apellidoMaterno; }
-    public void setApellidoMaterno(String a) { this.apellidoMaterno = a; }
+    public void setApellidoMaterno(String apellidoMaterno) { this.apellidoMaterno = apellidoMaterno; }
+
     public String getDni() { return dni; }
-    public void setDni(String d) { this.dni = d; }
+    public void setDni(String dni) { this.dni = dni; }
+
     public String getSexo() { return sexo; }
-    public void setSexo(String s) { this.sexo = s; }
+    public void setSexo(String sexo) { this.sexo = sexo; }
+
     public String getEmail() { return email; }
-    public void setEmail(String e) { this.email = e; }
+    public void setEmail(String email) { this.email = email; }
+
     public String getPassword() { return password; }
-    public void setPassword(String p) { this.password = p; }
+    public void setPassword(String password) { this.password = password; }
 }
+
 

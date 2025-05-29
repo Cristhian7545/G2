@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+</head>
+<body>
+<h1>Accede</h1>
+<form id="loginForm">
+  <label>Email: <input type="email" name="email" /></label><br/>
+  <label>Contraseña: <input type="password" name="password" /></label><br/>
+  <button type="submit">Entrar</button>
+</form>
+<p id="msg2"></p>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+      email: form.email.value,
+      password: form.password.value
+    };
+    try {
+      const resp = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (resp.ok) {
+        const token = resp.headers.get('Authorization');
+        document.getElementById('msg2').innerText = '¡Login OK! Token: ' + token;
+        // aquí guardas el token en localStorage si quieres
+      } else {
+        const json = await resp.json();
+        document.getElementById('msg2').innerText = 'Error: ' + (json.error||JSON.stringify(json));
+      }
+    } catch (err) {
+      document.getElementById('msg2').innerText = '¡Fallo de red!';
+    }
+  });
+</script>
+</body>
+</html>
+
+
+

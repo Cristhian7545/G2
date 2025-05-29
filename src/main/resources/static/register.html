@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro de Usuario</title>
+</head>
+<body>
+<h1>Regístrate</h1>
+<form id="regForm">
+  <label>Nombre: <input type="text" name="nombre" /></label><br/>
+  <label>Apellido Paterno: <input type="text" name="apellidoPaterno" /></label><br/>
+  <label>Apellido Materno: <input type="text" name="apellidoMaterno" /></label><br/>
+  <label>DNI: <input type="text" name="dni" /></label><br/>
+  <label>Sexo:
+    <select name="sexo">
+      <option value="M">Masculino</option>
+      <option value="F">Femenino</option>
+    </select>
+  </label><br/>
+  <label>Email: <input type="email" name="email" /></label><br/>
+  <label>Password: <input type="password" name="password" /></label><br/>
+  <button type="submit">Registrar</button>
+</form>
+
+<script>
+  document.getElementById('regForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+      nombre: form.nombre.value,
+      apellidoPaterno: form.apellidoPaterno.value,
+      apellidoMaterno: form.apellidoMaterno.value,
+      dni: form.dni.value,
+      sexo: form.sexo.value,
+      email: form.email.value,
+      password: form.password.value
+    };
+    try {
+      const resp = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await resp.json();
+      if (resp.ok && json.success) {
+        alert('¡Registro exitoso!');
+        window.location.href = '/login.html';
+      } else {
+        alert('Error al registrar: ' + JSON.stringify(json));
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Falló la llamada al servidor');
+    }
+  });
+</script>
+</body>
+</html>
+
+
