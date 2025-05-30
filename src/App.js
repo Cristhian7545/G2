@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Servicios from './componentes/Servicios';
+import ServicioPersona from './componentes/ServicioPersona';
+import ServicioEvento from './componentes/ServicioEvento';
+import Nosotros from './componentes/Nosotros';
+import ListaDoctores from './componentes/ListaDoctores';
+import Sucursales from './componentes/Sucursales';
+import Register from './componentes/Register';
+import Login from './componentes/Login'; // nombre corregido
+import Reclamos from './componentes/Reclamos';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/servicios" element={<Servicios />} />
+        <Route path="/servicio-persona" element={<ServicioPersona />} />
+        <Route path="/servicio-evento" element={<ServicioEvento />} />
+        <Route path="/nosotros" element={<Nosotros />} />
+        <Route path="/medicos" element={<ListaDoctores />} />
+        <Route path="/sucursales" element={<Sucursales />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/reclamos" element={<Reclamos />} />
+
+
+      </Routes>
+    </Router>
   );
 }
 
